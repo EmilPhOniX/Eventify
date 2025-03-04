@@ -6,13 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class UserController extends AbstractController
+final class RegisterController extends AbstractController
 {
     #[Route('/inscription', name: 'app_register')]
     public function index(): Response
     {
         return $this->render('user/inscription.html.twig', [
-            'controller_name' => 'UserController',
+            'controller_name' => 'RegisterController',
         ]);
     }
 
@@ -20,7 +20,7 @@ final class UserController extends AbstractController
     // public function login(): Response
     // {
     //     return $this->render('user/connexion.html.twig', [
-    //         'controller_name' => 'UserController',
+    //         'controller_name' => 'RegisterController',
     //     ]);
     // }
 }
