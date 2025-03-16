@@ -8,7 +8,10 @@
 
     <div id="end">
         {% if app.user %}
-            <a href="{{ path('app_profile') }}">profil de {{ app.user.email }}</a>
+            <a href="{{ path('app_profile') }}">Profil de {{ app.user.email }}</a>
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <a href="{{ path('app_dashboard') }}">Dashboard</a>
+            {% endif %}
             <a href="{{ path('app_logout') }}">Déconnexion</a>
         {% else %}
             <a href="{{ path('app_register') }}">Inscription</a>
@@ -16,5 +19,3 @@
         {% endif %}
     </div>
 </header>
-
-
