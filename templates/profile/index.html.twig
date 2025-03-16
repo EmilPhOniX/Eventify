@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/register.css') }}">
+{% endblock %}
+
 {% block title %}Éditer le profil{% endblock %}
 
 {% block body %}
-    <div class="container">
         <h1>Modifier votre profil</h1>
 
         {% for message in app.flashes('success') %}
@@ -15,5 +18,4 @@
         {{ form_row(form.plainPassword, { 'label': 'Nouveau mot de passe' }) }}
         <button type="submit" class="btn btn-primary">Sauvegarder</button>
         {{ form_end(form) }}
-    </div>
 {% endblock %}
