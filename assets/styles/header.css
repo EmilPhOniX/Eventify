@@ -3,6 +3,7 @@ header {
     flex-direction: row;
     background: linear-gradient(100deg, #b59797, #494949);
     justify-content: space-between;
+    color: white;
 }
 
 #start, #end {
@@ -26,7 +27,6 @@ header h1 {
 header a {
     display: inline-block;
     text-decoration: none;
-    color: white;
     padding: 5px;
     margin: 5px;
     transition: color 0.4s, background-color 0.4s, transform 0.4s, box-shadow 0.5s;

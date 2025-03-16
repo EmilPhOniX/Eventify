@@ -7,8 +7,13 @@
     </div>
 
     <div id="end">
-        <a href="{{ path('app_register') }}">Inscription</a>
-        <a href="{{ path('app_login') }}">Connexion</a>
+        {% if app.user %}
+            <a href="{{ path('app_profile') }}">profil de {{ app.user.email }}</a>
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+        {% else %}
+            <a href="{{ path('app_register') }}">Inscription</a>
+            <a href="{{ path('app_login') }}">Connexion</a>
+        {% endif %}
     </div>
 </header>
 
