@@ -25,7 +25,7 @@
                 <td>
                     <a href="{{ path('app_event_show', {'id': event.id}) }}">show</a>
 
-                    {% if is_granted('ROLE_USER') %}
+                    {% if is_granted('ROLE_USER') and app.user == event.creatorID %}
                         <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
                     {% endif %}
                 </td>

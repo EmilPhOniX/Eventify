@@ -24,7 +24,11 @@
 
     <a href="{{ path('app_event_index') }}">back to list</a>
 
-    <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+    {% if app.user == event.creatorID %}
+        <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+    {% endif %}
 
-    {{ include('event/_delete_form.html.twig') }}
+    {% if app.user == event.creatorID %}
+        {{ include('event/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}

@@ -12,9 +12,21 @@
 
     <div class="example-wrapper">
         <h1>Bienvenue sur Eventify !</h1>
-        <h2>Accedez à <a href="http://localhost:5173/">EventifyListener</a></h2>
+        <h2>Accédez à <a href="http://localhost:5173/">EventifyListener</a></h2>
         <h2>Les événements à venir :</h2>
 
-
+        {% if upcoming_events is not empty %}
+            <div class="event-list">
+                {% for event in upcoming_events %}
+                    <div class="event-item">
+                        <h3>{{ event.name }}</h3>
+                        <p>Date : {{ event.date|date('d/m/Y H:i') }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucun événement à venir.</p>
+        {% endif %}
+        <a href="/event">Voir les evenements a venir</a>
     </div>
 {% endblock %}
