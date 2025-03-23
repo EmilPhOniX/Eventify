@@ -31,6 +31,10 @@ class Event
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $creatorID = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -56,6 +60,18 @@ class Event
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getCreatorID(): ?User
+    {
+        return $this->creatorID;
+    }
+
+    public function setCreatorID(?User $creatorID): static
+    {
+        $this->creatorID = $creatorID;
 
         return $this;
     }

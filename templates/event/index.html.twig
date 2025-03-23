@@ -10,6 +10,7 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>Creator</th>
                 <th>Date</th>
                 <th>actions</th>
             </tr>
@@ -19,10 +20,14 @@
             <tr>
                 <td>{{ event.id }}</td>
                 <td>{{ event.name }}</td>
-                <td>{{ event.date ? event.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ event.creatorID.email }}</td>
+                <td>{{ event.date ? event.date|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('app_event_show', {'id': event.id}) }}">show</a>
-                    <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+
+                    {% if is_granted('ROLE_USER') %}
+                        <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -33,5 +38,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_event_new') }}">Create new</a>
+    {% if is_granted('ROLE_USER') %}
+        <a href="{{ path('app_event_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}
