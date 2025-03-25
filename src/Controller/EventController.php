@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/event')]
+#[Route('/api/event')]
 final class EventController extends AbstractController{
     #[Route(name: 'app_event_index', methods: ['GET'])]
     public function index(EventRepository $eventRepository): Response

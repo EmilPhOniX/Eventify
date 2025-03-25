@@ -12,7 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/artist')]
+/**
+ * List the rewards of the specified user.
+ *
+ * This call takes into account all confirmed awards, but not pending or refused awards.
+ */
+#[Route('/api/artist')]
 final class ArtistController extends AbstractController{
     #[Route(name: 'app_artist_index', methods: ['GET'])]
     public function index(ArtistRepository $artistRepository): Response
