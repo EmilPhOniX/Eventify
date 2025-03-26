@@ -22,14 +22,16 @@
                         <h3>{{ event.name }}</h3>
                         <p>Date : {{ event.date|date('d/m/Y H:i') }}</p>
 
-                        {% if event.isUserRegistered %}
-                            <form method="POST" action="{{ path('app_event_leave', { 'id': event.id }) }}">
-                                <button type="submit" class="btn btn-danger">Se désinscrire</button>
-                            </form>
-                        {% else %}
-                            <form method="POST" action="{{ path('app_event_join', { 'id': event.id }) }}">
-                                <button type="submit" class="btn btn-success">S'inscrire</button>
-                            </form>
+                        {% if app.user %}
+                            {% if event.isUserRegistered %}
+                                <form method="POST" action="{{ path('app_event_leave', { 'id': event.id }) }}">
+                                    <button type="submit" class="btn btn-danger">Se désinscrire</button>
+                                </form>
+                            {% else %}
+                                <form method="POST" action="{{ path('app_event_join', { 'id': event.id }) }}">
+                                    <button type="submit" class="btn btn-success">S'inscrire</button>
+                                </form>
+                            {% endif %}
                         {% endif %}
                     </div>
                 {% endfor %}
