@@ -22,13 +22,34 @@ class EventRepository extends ServiceEntityRepository
      */
     public function findUpcomingEvents(): array
     {
-        // Créer la requête pour obtenir les événements dont la date est supérieure à la date actuelle
         $currentDate = new \DateTime();
 
         return $this->createQueryBuilder('e')
             ->where('e.date > :currentDate')
             ->setParameter('currentDate', $currentDate)
             ->orderBy('e.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupérer les événements filtrés par date
+     */
+    public function findByDateRange(?string $startDate, ?string $endDate): array
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        if ($startDate) {
+            $qb->andWhere('e.date >= :startDate')
+                ->setParameter('startDate', new \DateTime($startDate));
+        }
+
+        if ($endDate) {
+            $qb->andWhere('e.date <= :endDate')
+                ->setParameter('endDate', new \DateTime($endDate));
+        }
+
+        return $qb->orderBy('e.date', 'ASC')
             ->getQuery()
             ->getResult();
     }

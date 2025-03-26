@@ -17,10 +17,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class EventController extends AbstractController
 {
     #[Route(name: 'app_event_index', methods: ['GET'])]
-    public function index(EventRepository $eventRepository): Response
+    public function index(Request $request, EventRepository $eventRepository): Response
     {
+        $startDate = $request->query->get('startDate');
+        $endDate = $request->query->get('endDate');
+
+        $events = $eventRepository->findByDateRange($startDate, $endDate);
+
         return $this->render('event/index.html.twig', [
-            'events' => $eventRepository->findAll(),
+            'events' => $events,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
         ]);
     }
 
@@ -45,7 +52,7 @@ final class EventController extends AbstractController
 
         $event = new Event();
         $event->setCreatorID($user);
-        $event->addParticipant($user); // Ajoute automatiquement le créateur à la liste des participants
+        $event->addParticipant($user);
 
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);

@@ -14,12 +14,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/artist')]
 #[IsGranted('ROLE_USER')]
-final class ArtistController extends AbstractController{
+final class ArtistController extends AbstractController {
     #[Route(name: 'app_artist_index', methods: ['GET'])]
-    public function index(ArtistRepository $artistRepository): Response
+    public function index(Request $request, ArtistRepository $artistRepository): Response
     {
+        $searchTerm = $request->query->get('search', '');
+        $artists = $artistRepository->searchByName($searchTerm);
+
         return $this->render('artist/index.html.twig', [
-            'artists' => $artistRepository->findAll(),
+            'artists' => $artists,
+            'searchTerm' => $searchTerm,
         ]);
     }
 
@@ -75,7 +79,7 @@ final class ArtistController extends AbstractController{
     #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, Artist $artist, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$artist->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $artist->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($artist);
             $entityManager->flush();
         }

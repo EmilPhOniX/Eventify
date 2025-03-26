@@ -19,7 +19,7 @@ final class ApiEventController extends AbstractController
             'id' => $event->getId(),
             'name' => $event->getName(),
             'date' => $event->getDate()?->format('Y-m-d H:i:s'),
-            'creator' => $event->getCreatorID()?->getId(), // Assurez-vous que la relation est bien gérée
+            'creator' => $event->getCreatorID()?->getId(),
         ], $events);
 
         return $this->json($data);

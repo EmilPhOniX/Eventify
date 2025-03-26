@@ -5,6 +5,17 @@
 {% block body %}
     <h1>Event index</h1>
 
+    <form method="get" action="{{ path('app_event_index') }}">
+        <label for="startDate">Date de début:</label>
+        <input type="date" id="startDate" name="startDate" value="{{ startDate }}">
+
+        <label for="endDate">Date de fin:</label>
+        <input type="date" id="endDate" name="endDate" value="{{ endDate }}">
+
+        <button type="submit">Filtrer</button>
+        <a href="{{ path('app_event_index') }}" class="btn btn-secondary">Réinitialiser</a>
+    </form>
+
     <table class="table">
         <thead>
         <tr>
@@ -13,7 +24,7 @@
             <th>Creator</th>
             <th>Date</th>
             <th>Actions</th>
-            <th>Inscription</th> {# Nouvelle colonne pour l'inscription #}
+            <th>Inscription</th>
         </tr>
         </thead>
         <tbody>
@@ -33,12 +44,10 @@
                 <td>
                     {% if is_granted('ROLE_USER') %}
                         {% if app.user in event.participants %}
-                            {# L'utilisateur est inscrit, il peut se désinscrire #}
                             <form method="POST" action="{{ path('app_event_leave', {id: event.id}) }}" style="display:inline;">
                                 <button type="submit" class="btn btn-warning">Se désinscrire</button>
                             </form>
                         {% else %}
-                            {# L'utilisateur n'est pas inscrit, il peut s'inscrire #}
                             <form method="POST" action="{{ path('app_event_join', {id: event.id}) }}" style="display:inline;">
                                 <button type="submit" class="btn btn-success">S'inscrire</button>
                             </form>

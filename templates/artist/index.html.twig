@@ -1,18 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Artist index{% endblock %}
+{% block title %}Artists{% endblock %}
 
 {% block body %}
-    <h1>Artist index</h1>
+    <h1>Artists</h1>
+
+    <!-- Formulaire de recherche -->
+    <form method="GET" action="{{ path('app_artist_index') }}">
+        <input type="text" name="search" value="{{ searchTerm }}" placeholder="Rechercher un artiste">
+        <button type="submit">Rechercher</button>
+    </form>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for artist in artists %}
@@ -21,21 +27,22 @@
                 <td>{{ artist.name }}</td>
                 <td>{{ artist.description }}</td>
                 <td>
-                    <a href="{{ path('app_artist_show', {'id': artist.id}) }}">show</a>
+                    <a href="{{ path('app_artist_show', {'id': artist.id}) }}">Show</a>
 
                     {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('app_artist_edit', {'id': artist.id}) }}">edit</a>
+                        <a href="{{ path('app_artist_edit', {'id': artist.id}) }}">Edit</a>
                     {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="4">Aucun artiste trouvé.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_artist_new') }}">Create new</a>
+        <a href="{{ path('app_artist_new') }}">Créer un nouvel artiste</a>
     {% endif %}
 {% endblock %}
