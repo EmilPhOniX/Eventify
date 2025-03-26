@@ -8,6 +8,8 @@
 
     <div id="end">
         {% if app.user %}
+            <a href="{{ path('app_event_index') }}">acceder aux évènements</a>
+            <a href="{{ path('app_artist_index') }}">acceder aux artistse</a>
             <a href="{{ path('app_profile') }}">Profil de {{ app.user.email }}</a>
             {% if 'ROLE_ADMIN' in app.user.roles %}
                 <a href="{{ path('app_dashboard') }}">Dashboard</a>
