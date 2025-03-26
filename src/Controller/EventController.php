@@ -10,14 +10,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/api/event')]
-final class EventController extends AbstractController{
+#[Route('/event')]
+#[IsGranted('ROLE_USER')]
+final class EventController extends AbstractController
+{
     #[Route(name: 'app_event_index', methods: ['GET'])]
     public function index(EventRepository $eventRepository): Response
     {
         return $this->render('event/index.html.twig', [
             'events' => $eventRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/my-events', name: 'app_event_my_events', methods: ['GET'])]
+    public function myEvents(): Response
+    {
+        $user = $this->getUser();
+
+        return $this->render('event/my_events.html.twig', [
+            'events' => $user->getEventsParticipated(),
         ]);
     }
 
@@ -32,6 +45,8 @@ final class EventController extends AbstractController{
 
         $event = new Event();
         $event->setCreatorID($user);
+        $event->addParticipant($user); // Ajoute automatiquement le créateur à la liste des participants
+
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
@@ -74,11 +89,37 @@ final class EventController extends AbstractController{
         ]);
     }
 
-    #[Route('/{id}', name: 'app_event_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_event_delete', methods: ['POST'])]
     public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($event);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/join', name: 'app_event_join', methods: ['POST'])]
+    public function joinEvent(Event $event, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$event->getParticipants()->contains($user)) {
+            $event->addParticipant($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/leave', name: 'app_event_leave', methods: ['POST'])]
+    public function leaveEvent(Event $event, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if ($event->getParticipants()->contains($user)) {
+            $event->removeParticipant($user);
             $entityManager->flush();
         }
 

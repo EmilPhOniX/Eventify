@@ -5,5 +5,5 @@ nelmio_api_doc:
       description: "Documentation de mon API avec Swagger"
       version: "1.0.0"
   areas:
-    path_patterns: # Définir les routes à inclure dans la documentation
-      - ^/api # Cela inclut toutes les routes commençant par /api
+    path_patterns:
+      - ^/api

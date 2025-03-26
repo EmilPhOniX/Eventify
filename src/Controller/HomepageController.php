@@ -12,13 +12,19 @@ final class HomepageController extends AbstractController
     #[Route('/', name: 'app_homepage')]
     public function index(EventRepository $eventRepository): Response
     {
-        // Récupérer les événements à venir en appelant la méthode findUpcomingEvents
         $upcomingEvents = $eventRepository->findUpcomingEvents();
 
-        // Passer les événements à la vue
+        $user = $this->getUser();
+
+        if ($user) {
+            foreach ($upcomingEvents as $event) {
+                $event->isUserRegistered = $event->getParticipants()->contains($user);
+            }
+        }
+
         return $this->render('homepage/index.html.twig', [
             'controller_name' => 'HomepageController',
-            'upcoming_events' => $upcomingEvents,  // Passer les événements à la vue
+            'upcoming_events' => $upcomingEvents,
         ]);
     }
 }

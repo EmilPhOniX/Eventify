@@ -7,13 +7,14 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Creator</th>
-                <th>Date</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Creator</th>
+            <th>Date</th>
+            <th>Actions</th>
+            <th>Inscription</th> {# Nouvelle colonne pour l'inscription #}
+        </tr>
         </thead>
         <tbody>
         {% for event in events %}
@@ -23,22 +24,37 @@
                 <td>{{ event.creatorID.email }}</td>
                 <td>{{ event.date ? event.date|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_event_show', {'id': event.id}) }}">show</a>
+                    <a href="{{ path('app_event_show', {'id': event.id}) }}">Show</a>
 
                     {% if is_granted('ROLE_USER') and app.user == event.creatorID %}
-                        <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+                        <a href="{{ path('app_event_edit', {'id': event.id}) }}">Edit</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if is_granted('ROLE_USER') %}
+                        {% if app.user in event.participants %}
+                            {# L'utilisateur est inscrit, il peut se désinscrire #}
+                            <form method="POST" action="{{ path('app_event_leave', {id: event.id}) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-warning">Se désinscrire</button>
+                            </form>
+                        {% else %}
+                            {# L'utilisateur n'est pas inscrit, il peut s'inscrire #}
+                            <form method="POST" action="{{ path('app_event_join', {id: event.id}) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-success">S'inscrire</button>
+                            </form>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="6">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
     {% if is_granted('ROLE_USER') %}
-        <a href="{{ path('app_event_new') }}">Create new</a>
+        <a href="{{ path('app_event_new') }}" class="btn btn-primary">Create new</a>
     {% endif %}
 {% endblock %}
