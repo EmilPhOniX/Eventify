@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
 #[ApiResource(
@@ -27,6 +29,10 @@ class Artist
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\Column(type: 'string',length: 255, nullable: true)]
+    #[Assert\Image(mimeTypes: ["image/png", "image/jpg", "image/jpeg"])]
+    private ?string $image = null;
 
     public function getId(): ?int
     {
@@ -53,6 +59,18 @@ class Artist
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -17,6 +17,7 @@
             <th>Id</th>
             <th>Nom</th>
             <th>Description</th>
+            <th>Image</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -26,6 +27,14 @@
                 <td>{{ artist.id }}</td>
                 <td>{{ artist.name }}</td>
                 <td>{{ artist.description }}</td>
+                <td>
+                    {% if artist.image %}
+                        <img src="{{ asset('uploads/images/' ~ artist.image) }}" alt="{{ artist.name }}" width="100">
+                    {% else %}
+                        <p>Aucune image disponible</p>
+                    {% endif %}
+
+                </td>
                 <td>
                     <a href="{{ path('app_artist_show', {'id': artist.id}) }}">Show</a>
 

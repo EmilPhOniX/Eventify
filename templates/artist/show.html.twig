@@ -19,6 +19,16 @@
                 <th>Description</th>
                 <td>{{ artist.description }}</td>
             </tr>
+            <tr>
+                <th>Image</th>
+                <td>
+                    {% if artist.image %}
+                        <img src="{{ asset('uploads/images/' ~ artist.image) }}" alt="{{ artist.name }}" width="100">
+                    {% else %}
+                        <p>Aucune image disponible</p>
+                    {% endif %}
+                </td>
+            </tr>
         </tbody>
     </table>
 
