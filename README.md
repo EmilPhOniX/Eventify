@@ -40,10 +40,13 @@ Pour installer Eventify, suivez les étapes ci-dessous :
 4. Configurez votre base de données en copiant le `.env` et en le renommant `.env.local`
 
 
-5. Décommentez a la ligne qui concerne `SQLite`
+5. Commentez la ligne `DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"`
 
 
-6. Exécutez les migrations de la base de données :
+6. décommentez la ligne `# DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db"`
+
+
+7. Exécutez les migrations de la base de données :
     ```bash
     php bin/console doctrine:migrations:migrate
     ```
