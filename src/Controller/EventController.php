@@ -58,6 +58,13 @@ final class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $artist = $form->get('artist')->getData();
+            if (!$artist) {
+                $this->addFlash('error', 'Un artiste doit être sélectionné.');
+                return $this->redirectToRoute('app_event_new');
+            }
+
+            $event->setArtist($artist);
             $entityManager->persist($event);
             $entityManager->flush();
 
@@ -85,6 +92,13 @@ final class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $artist = $form->get('artist')->getData();
+            if (!$artist) {
+                $this->addFlash('error', 'Un artiste doit être sélectionné.');
+                return $this->redirectToRoute('app_event_edit', ['id' => $event->getId()]);
+            }
+
+            $event->setArtist($artist);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
@@ -99,7 +113,7 @@ final class EventController extends AbstractController
     #[Route('/{id}/delete', name: 'app_event_delete', methods: ['POST'])]
     public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
             $entityManager->remove($event);
             $entityManager->flush();
         }

@@ -20,8 +20,10 @@
         <thead>
         <tr>
             <th>Id</th>
-            <th>Name</th>
-            <th>Creator</th>
+            <th>Nom</th>
+            <th>Artist présent</th>
+            <th>Initié par</th>
+            <th>Image de l'artist</th>
             <th>Date</th>
             <th>Actions</th>
             <th>Inscription</th>
@@ -32,6 +34,14 @@
             <tr>
                 <td>{{ event.id }}</td>
                 <td>{{ event.name }}</td>
+                <td>{{ event.artist.name }}</td>
+                <td>
+                    {% if event.artist.image %}
+                        <img src="{{ asset('uploads/images/' ~ event.artist.image) }}" alt="{{ event.artist.name }}" width="100">
+                    {% else %}
+                        <p>Aucune image disponible</p>
+                    {% endif %}
+                </td>
                 <td>{{ event.creatorID.email }}</td>
                 <td>{{ event.date ? event.date|date('Y-m-d') : '' }}</td>
                 <td>

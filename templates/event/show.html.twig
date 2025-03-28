@@ -19,6 +19,10 @@
                 <th>Date</th>
                 <td>{{ event.date ? event.date|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>Artist</th>
+                <td><a href="{{ path('app_artist_show', {'id': event.artist.id}) }}">{{ event.artist.name }}</a></td>
+            </tr>
         </tbody>
     </table>
 

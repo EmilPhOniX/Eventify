@@ -15,11 +15,20 @@ final class ApiEventController extends AbstractController
     public function index(EventRepository $eventRepository): JsonResponse
     {
         $events = $eventRepository->findAll();
-        $data = array_map(fn($event) => [
+
+        $data = array_map(fn(Event $event) => [
             'id' => $event->getId(),
             'name' => $event->getName(),
             'date' => $event->getDate()?->format('Y-m-d H:i:s'),
-            'creator' => $event->getCreatorID()?->getId(),
+            'creator' => [
+                'id' => $event->getCreatorID()?->getId(),
+                'email' => $event->getCreatorID()?->getEmail(),
+            ],
+            'artist' => $event->getArtist()?->getId(),
+            'participants' => array_map(fn($participant) => [
+                'id' => $participant->getId(),
+                'email' => $participant->getEmail(),
+            ], $event->getParticipants()->toArray()),
         ], $events);
 
         return $this->json($data);
@@ -32,8 +41,15 @@ final class ApiEventController extends AbstractController
             'id' => $event->getId(),
             'name' => $event->getName(),
             'date' => $event->getDate()?->format('Y-m-d H:i:s'),
-            'location' => $event->getLocation(),
-            'creator' => $event->getCreatorID()?->getId(),
+            'creator' => [
+                'id' => $event->getCreatorID()?->getId(),
+                'email' => $event->getCreatorID()?->getEmail(),
+            ],
+            'artist' => $event->getArtist()?->getId(),
+            'participants' => array_map(fn($participant) => [
+                'id' => $participant->getId(),
+                'email' => $participant->getEmail(),
+            ], $event->getParticipants()->toArray()),
         ]);
     }
 }

@@ -18,6 +18,13 @@ final class ApiArtistController extends AbstractController
         $data = array_map(fn($artist) => [
             'id' => $artist->getId(),
             'name' => $artist->getName(),
+            'description' => $artist->getDescription(),
+            'image' => $artist->getImage(),
+            'events' => array_map(fn($event) => [
+                'id' => $event->getId(),
+                'name' => $event->getName(),
+                'date' => $event->getDate()->format('Y-m-d H:i:s'),
+            ], $artist->getEvents()->toArray()),
         ], $artists);
 
         return $this->json($data);
@@ -29,6 +36,13 @@ final class ApiArtistController extends AbstractController
         return $this->json([
             'id' => $artist->getId(),
             'name' => $artist->getName(),
+            'description' => $artist->getDescription(),
+            'image' => $artist->getImage(),
+            'events' => array_map(fn($event) => [
+                'id' => $event->getId(),
+                'name' => $event->getName(),
+                'date' => $event->getDate()->format('Y-m-d H:i:s'),
+            ], $artist->getEvents()->toArray()),
         ]);
     }
 }

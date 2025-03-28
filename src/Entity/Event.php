@@ -9,7 +9,6 @@ use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
@@ -36,11 +35,12 @@ class Event
     #[ORM\JoinColumn(nullable: false)]
     private ?User $creatorID = null;
 
-    /**
-     * @var Collection<int, User>
-     */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'eventsParticipated')]
     private Collection $participants;
+
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Artist $artist = null;
 
     public function __construct()
     {
@@ -88,9 +88,6 @@ class Event
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
     public function getParticipants(): Collection
     {
         return $this->participants;
@@ -112,6 +109,17 @@ class Event
             $participant->removeEventsParticipated($this);
         }
 
+        return $this;
+    }
+
+    public function getArtist(): ?Artist
+    {
+        return $this->artist;
+    }
+
+    public function setArtist(?Artist $artist): static
+    {
+        $this->artist = $artist;
         return $this;
     }
 }
