@@ -55,6 +55,8 @@ Pour installer Eventify, suivez les étapes ci-dessous :
     symfony serve
     ```
 
+8. Si dans le Répetoire `public` il n'y as pas le chemin `uploads/images` créez le.
+
 ## Utilisation
 
 Une fois l'installation terminée, vous pouvez accéder à l'application via votre navigateur à l'adresse suivante : `http://localhost:8000`.
