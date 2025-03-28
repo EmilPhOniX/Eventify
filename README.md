@@ -37,14 +37,17 @@ Pour installer Eventify, suivez les étapes ci-dessous :
     ```bash
     composer install
     ```
-4. Configurez votre base de données dans le fichier `.env` :
+4. Configurez votre base de données en copiant le `.env` et en le renommant `.env.local`
 
 
-5. Exécutez les migrations de la base de données :
+5. Décommentez a la ligne qui concerne `SQLite`
+
+
+6. Exécutez les migrations de la base de données :
     ```bash
     php bin/console doctrine:migrations:migrate
     ```
-6. Démarrez le serveur de développement Symfony :
+7. Démarrez le serveur de développement Symfony :
     ```bash
     symfony serve
     ```
