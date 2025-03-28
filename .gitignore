@@ -50,3 +50,6 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+/public/uploads
+var/data.db
+.env.local
