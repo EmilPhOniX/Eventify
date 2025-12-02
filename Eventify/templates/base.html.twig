@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Eventify{% endblock %}</title>
+        <link rel="icon" href="Logo-eventify.png">
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        {% include 'includes/header.html.twig' %}
+
+        {% block body %}{% endblock %}
+
+        {% include 'includes/footer.html.twig' %}
+
+    </body>
+</html>

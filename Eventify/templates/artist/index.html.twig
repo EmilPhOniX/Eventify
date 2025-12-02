@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Artists{% endblock %}
+
+{% block body %}
+    <h1>Artists</h1>
+
+    <!-- Formulaire de recherche -->
+    <form method="GET" action="{{ path('app_artist_index') }}">
+        <input type="text" name="search" value="{{ searchTerm }}" placeholder="Rechercher un artiste">
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for artist in artists %}
+            <tr>
+                <td>{{ artist.id }}</td>
+                <td>{{ artist.name }}</td>
+                <td>{{ artist.description }}</td>
+                <td>
+                    {% if artist.image %}
+                        <img src="{{ asset('uploads/images/' ~ artist.image) }}" alt="{{ artist.name }}" width="100">
+                    {% else %}
+                        <p>Aucune image disponible</p>
+                    {% endif %}
+
+                </td>
+                <td>
+                    <a href="{{ path('app_artist_show', {'id': artist.id}) }}">Show</a>
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_artist_edit', {'id': artist.id}) }}">Edit</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun artiste trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_artist_new') }}">Créer un nouvel artiste</a>
+    {% endif %}
+{% endblock %}

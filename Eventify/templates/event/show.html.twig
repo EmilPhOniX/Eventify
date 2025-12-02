@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Event{% endblock %}
+
+{% block body %}
+    <h1>Evénement</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ event.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ event.name }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ event.date ? event.date|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Artist</th>
+                <td><a href="{{ path('app_artist_show', {'id': event.artist.id}) }}">{{ event.artist.name }}</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_event_index') }}">retour à liste</a>
+
+    {% if app.user == event.creatorID %}
+        <a href="{{ path('app_event_edit', {'id': event.id}) }}">modifier</a>
+    {% endif %}
+
+    {% if app.user == event.creatorID %}
+        {{ include('event/_delete_form.html.twig') }}
+    {% endif %}
+{% endblock %}

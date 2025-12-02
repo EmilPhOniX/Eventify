@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/register.css') }}">
+{% endblock %}
+
+{% block title %}Éditer le profil{% endblock %}
+
+{% block body %}
+    <h1>Modifier votre profil</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.plainPassword, { 'label': 'Nouveau mot de passe' }) }}
+    <button type="submit" class="btn btn-primary">Sauvegarder</button>
+    {{ form_end(form) }}
+
+    <h2>Événements auxquels vous êtes inscrit</h2>
+
+    {% if app.user.EventsParticipated is not empty %}
+        <ul>
+            {% for event in app.user.EventsParticipated %}
+                <li>
+                    {{ event.name }} - {{ event.date ? event.date|date('Y-m-d') : '' }}
+                    <form method="POST" action="{{ path('app_event_leave', {id: event.id}) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-warning btn-sm">Se désinscrire</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Vous n'êtes inscrit à aucun événement.</p>
+    {% endif %}
+    <a href="{{ path('app_event_index') }}">acceder à tout les évènements</a>
+
+{% endblock %}

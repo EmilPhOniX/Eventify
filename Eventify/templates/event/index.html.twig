@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+
+{% block body %}
+    <h1>Event index</h1>
+
+    <form method="get" action="{{ path('app_event_index') }}">
+        <label for="startDate">Date de début:</label>
+        <input type="date" id="startDate" name="startDate" value="{{ startDate }}">
+
+        <label for="endDate">Date de fin:</label>
+        <input type="date" id="endDate" name="endDate" value="{{ endDate }}">
+
+        <button type="submit">Filtrer</button>
+        <a href="{{ path('app_event_index') }}" class="btn btn-secondary">Réinitialiser</a>
+    </form>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Artist présent</th>
+            <th>Initié par</th>
+            <th>Image de l'artist</th>
+            <th>Date</th>
+            <th>Actions</th>
+            <th>Inscription</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.id }}</td>
+                <td>{{ event.name }}</td>
+                <td>{{ event.artist.name }}</td>
+                <td>
+                    {% if event.artist.image %}
+                        <img src="{{ asset('uploads/images/' ~ event.artist.image) }}" alt="{{ event.artist.name }}" width="100">
+                    {% else %}
+                        <p>Aucune image disponible</p>
+                    {% endif %}
+                </td>
+                <td>{{ event.creatorID.email }}</td>
+                <td>{{ event.date ? event.date|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_event_show', {'id': event.id}) }}">Show</a>
+
+                    {% if is_granted('ROLE_USER') and app.user == event.creatorID %}
+                        <a href="{{ path('app_event_edit', {'id': event.id}) }}">Edit</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if is_granted('ROLE_USER') %}
+                        {% if app.user in event.participants %}
+                            <form method="POST" action="{{ path('app_event_leave', {id: event.id}) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-warning">Se désinscrire</button>
+                            </form>
+                        {% else %}
+                            <form method="POST" action="{{ path('app_event_join', {id: event.id}) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-success">S'inscrire</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_USER') %}
+        <a href="{{ path('app_event_new') }}" class="btn btn-primary">Create new</a>
+    {% endif %}
+{% endblock %}

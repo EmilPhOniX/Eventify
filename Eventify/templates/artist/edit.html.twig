@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Artist{% endblock %}
+
+{% block body %}
+    <h1>Modifier l'Artiste</h1>
+
+    {% if artist.image %}
+        <img src="{{ asset('uploads/artists/' ~ artist.image) }}" alt="Image de {{ artist.name }}" style="max-width: 200px;">
+    {% endif %}
+
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+    {{ form_widget(form) }}
+    <button type="submit">Enregistrer les modifications</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_artist_index') }}">Retour à la liste</a>
+{% endblock %}

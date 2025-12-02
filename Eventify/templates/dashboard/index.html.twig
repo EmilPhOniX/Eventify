@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de Bord Admin{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        .actions { margin-top: 20px; }
+        .actions a { margin-right: 10px; text-decoration: none; color: #007bff; }
+        .actions a:hover { text-decoration: underline; }
+    </style>
+
+    <div class="example-wrapper">
+        <h1>Tableau de Bord Admin</h1>
+        <p>Ici l'admin peut voir, créer, modifier et supprimer tous les artistes.</p>
+
+        <div class="actions">
+            <a href="{{ path('app_artist_index') }}">Voir tous les artistes</a>
+            <a href="{{ path('app_artist_new') }}">Créer un nouvel artiste</a>
+        </div>
+
+        {% if artists is defined and artists|length > 0 %}
+            <h2>Liste des Artistes</h2>
+            <ul>
+                {% for artist in artists %}
+                    <li>
+                        {{ artist.name }}
+                        <a href="{{ path('app_artist_edit', {id: artist.id}) }}">Modifier</a>
+                        <a href="{{ path('app_artist_delete', {id: artist.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet artiste ?')">Supprimer</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun artiste trouvé.</p>
+        {% endif %}
+        <a href="{{ path('app_user_index') }}">Acceder a tout les utilisateurs</a>
+    </div>
+{% endblock %}

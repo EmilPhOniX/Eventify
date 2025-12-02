@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Eventify{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        .event-list { margin-top: 20px; }
+        .event-item { margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; }
+    </style>
+
+    <div class="example-wrapper">
+        <h1>Bienvenue sur Eventify !</h1>
+        <h2>Accédez à <a href="http://localhost:5173/">EventifyListener</a></h2>
+        <h2>Les événements à venir :</h2>
+
+        {% if upcoming_events is not empty %}
+            <div class="event-list">
+                {% for event in upcoming_events %}
+                    <div class="event-item">
+                        <h3>{{ event.name }}</h3>
+                        <p>Date : {{ event.date|date('d/m/Y H:i') }}</p>
+
+                        {% if app.user %}
+                            {% if event.isUserRegistered %}
+                                <form method="POST" action="{{ path('app_event_leave', { 'id': event.id }) }}">
+                                    <button type="submit" class="btn btn-danger">Se désinscrire</button>
+                                </form>
+                            {% else %}
+                                <form method="POST" action="{{ path('app_event_join', { 'id': event.id }) }}">
+                                    <button type="submit" class="btn btn-success">S'inscrire</button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucun événement à venir.</p>
+        {% endif %}
+        <a href="/event">Voir les événements à venir</a>
+    </div>
+{% endblock %}

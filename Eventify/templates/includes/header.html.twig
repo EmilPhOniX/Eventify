@@ -1,0 +1,23 @@
+<header>
+    <link rel="stylesheet" href="{{ asset('styles/header.css') }}">
+
+    <div id="start">
+        <a href="{{ path('app_homepage') }}"><img src="{{ asset('Logo-eventify.png') }}" alt="LogoEventify"></a>
+        <h1>Eventify</h1>
+    </div>
+
+    <div id="end">
+        {% if app.user %}
+            <a href="{{ path('app_event_index') }}">acceder aux évènements</a>
+            <a href="{{ path('app_artist_index') }}">acceder aux artistse</a>
+            <a href="{{ path('app_profile') }}">Profil de {{ app.user.email }}</a>
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <a href="{{ path('app_dashboard') }}">Dashboard</a>
+            {% endif %}
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+        {% else %}
+            <a href="{{ path('app_register') }}">Inscription</a>
+            <a href="{{ path('app_login') }}">Connexion</a>
+        {% endif %}
+    </div>
+</header>

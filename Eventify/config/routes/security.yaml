@@ -1,0 +1,36 @@
+_security_logout:
+    resource: security.route_loader.logout
+    type: service
+
+# security:
+#     # Hashage 
+#     password_hashers:
+#         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    
+#     providers:
+#         # Modify this based on your User entity and properties
+#         app_user_provider:
+#             entity:
+#                 class: App\Entity\User
+#                 property: email
+    
+#     firewalls:
+#         dev:
+#             pattern: ^/(_(profiler|wdt)|css|images|js)/
+#             security: false
+#         main:
+#             lazy: true
+#             provider: app_user_provider
+#             form_login:
+#                 login_path: app_login
+#                 check_path: app_login
+#                 enable_csrf: true
+#             logout:
+#                 path: app_logout
+#                 target: app_homepage
+
+
+#     # Configure access control
+#     access_control:
+#         # - { path: ^/admin, roles: ROLE_ADMIN }
+#         # - { path: ^/profile, roles: ROLE_USER }
