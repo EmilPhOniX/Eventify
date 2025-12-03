@@ -52,5 +52,4 @@
 /.web-server-pid
 /public/uploads/images/*
 var/data.db
-.DS_Store
 .env.local
