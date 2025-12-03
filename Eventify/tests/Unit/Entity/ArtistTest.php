@@ -65,7 +65,9 @@ class ArtistTest extends TestCase
         
         $artist->addEvent($event);
         
+        // Vérifie que l'événement a été ajouté à l'artiste
         $this->assertTrue($artist->getEvents()->contains($event));
+        // Vérifie que l'artiste de l'événement est correctement défini
         $this->assertSame($artist, $event->getArtist());
         
         $artist->removeEvent($event);
