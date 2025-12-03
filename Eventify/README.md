@@ -5,12 +5,13 @@ Une application Symfony de gestion d'évènements musicaux.
 
 ## Table des matières
 
-- [Description](#description)
-- [Caractéristiques](#caractéristiques)
-- [Installation](#installation)
-- [Utilisation](#utilisation)
-- [Contribuer](#contribuer)
-- [Licence](#licence)
+- [Eventify](#eventify)
+  - [Table des matières](#table-des-matières)
+  - [Description](#description)
+  - [Caractéristiques](#caractéristiques)
+  - [Installation](#installation)
+  - [Utilisation](#utilisation)
+  - [Tests](#tests)
 
 ## Description
 
@@ -60,3 +61,22 @@ Pour installer Eventify, suivez les étapes ci-dessous :
 ## Utilisation
 
 Une fois l'installation terminée, vous pouvez accéder à l'application via votre navigateur à l'adresse suivante : `http://localhost:8000`.
+
+## Tests
+
+Pour exécuter les tests unitaires, assurez-vous d'être dans le répertoire `Eventify` et que les dépendances sont installées.
+
+Lancer tous les tests :
+```bash
+php vendor/bin/phpunit
+```
+
+Lancer uniquement les tests des entités :
+```bash
+php vendor/bin/phpunit tests/Unit/Entity/
+```
+
+Lancer un fichier de test spécifique :
+```bash
+php vendor/bin/phpunit tests/Unit/Entity/EventTest.php
+```
