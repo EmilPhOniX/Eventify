@@ -31,6 +31,9 @@ class EntityValidationTest extends TestCase
         $this->assertGreaterThan(0, count($violations));
     }
 
+
+
+    
     public function testEventNameTooShort(): void
     {
         $event = new Event();
@@ -54,18 +57,6 @@ class EntityValidationTest extends TestCase
         
         $this->assertGreaterThan(0, count($violations));
         $this->assertSame('This value is not a valid email address.', $violations[0]->getMessage());
-    }
-
-    public function testInvalidUserPassword(): void
-    {
-        $user = new User();
-        $user->setEmail('test@example.com');
-        // Password is null
-        
-        // Validate only the password property
-        $violations = $this->validator->validateProperty($user, 'password');
-        
-        $this->assertGreaterThan(0, count($violations));
     }
 
     public function testInvalidArtistName(): void

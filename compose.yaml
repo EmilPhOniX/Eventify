@@ -1,0 +1,61 @@
+
+services:
+  database:
+    image: mysql:8.0
+    volumes:
+      - database_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_USER: ${MYSQL_USER:-app}
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+    ports:
+      - "3306:3306"
+    secrets:
+      - mysql_root_password
+      - mysql_password
+
+  symfony:
+    build:
+      context: ./Eventify
+      dockerfile: Dockerfile
+    volumes:
+      - ./Eventify:/var/www/html
+      - /var/www/html/vendor 
+    depends_on:
+      - database
+    environment:
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+      DATABASE_URL: 'mysql://${MYSQL_USER:-app}:%env(trim:file:MYSQL_PASSWORD_FILE)%@database:3306/${MYSQL_DATABASE:-app}?serverVersion=8.0&charset=utf8mb4'
+    secrets:
+      - mysql_password
+
+  react:
+    build:
+      context: ./EventifyListener
+      dockerfile: Dockerfile
+    volumes:
+      - ./EventifyListener:/usr/src/app
+    ports:
+      - "3000:80"
+    depends_on:
+      - symfony
+
+  nginx_symfony:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./Eventify/public:/var/www/html/public
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - symfony
+
+secrets:
+  mysql_root_password:
+    file: ./secrets/mysql_root_password.txt
+  mysql_password:
+    file: ./secrets/mysql_password.txt
+
+volumes:
+  database_data:
