@@ -17,4 +17,6 @@
     docker-compose up
     ```
 
+5. Accédez à Eventify via http://localhost:8000 et accédez à EventifyListener via http://localhost:3000
+    ```
 > Note : Les secrets MySQL sont gérés via des fichiers secrets, pour le bien de cette démonstration des mots de passe par défauts sont utilisés.
