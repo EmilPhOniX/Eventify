@@ -14,7 +14,11 @@ WORKDIR /var/www/html
 
 COPY composer.json composer.lock symfony.lock ./
 
-RUN composer install --no-dev --optimize-autoloader --classmap-authoritative --no-scripts --no-progress
+RUN composer install --no-scripts --no-progress --no-autoloader
+
+COPY . .
+
+RUN composer dump-autoload --optimize
 
 FROM php:8.4-fpm
 
