@@ -1,6 +1,7 @@
 
 services:
   database:
+   # Changer de version sur PC Windows pour plus de légèreté
     image: mysql:8.0
     volumes:
       - database_data:/var/lib/mysql
@@ -14,6 +15,11 @@ services:
     secrets:
       - mysql_root_password
       - mysql_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   symfony:
     build:
@@ -23,12 +29,15 @@ services:
       - ./Eventify:/var/www/html
       - /var/www/html/vendor 
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     environment:
       MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
       DATABASE_URL: 'mysql://${MYSQL_USER:-app}:%env(trim:file:MYSQL_PASSWORD_FILE)%@database:3306/${MYSQL_DATABASE:-app}?serverVersion=8.0&charset=utf8mb4'
     secrets:
       - mysql_password
+    ports:
+      - "9000:9000"
 
   react:
     build:

@@ -1,12 +1,12 @@
-FROM php:8.4-fpm
+FROM php:8.4-fpm AS builder
 
 RUN apt-get update && apt-get install -y \
-    libzip-dev \
+    git \
     unzip \
-    && docker-php-ext-install \
-    pdo \
-    pdo_mysql \
-    zip
+    libzip-dev \
+    libicu-dev
+
+RUN docker-php-ext-install zip intl
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -14,8 +14,24 @@ WORKDIR /var/www/html
 
 COPY composer.json composer.lock symfony.lock ./
 
-RUN composer install --prefer-dist --no-scripts --no-progress --no-interaction
+RUN composer install --no-dev --optimize-autoloader --classmap-authoritative --no-scripts --no-progress
 
+FROM php:8.4-fpm
+
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    libicu-dev \
+    && docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    zip \
+    intl \
+    opcache \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /var/www/html
+
+COPY --from=builder /var/www/html/vendor ./vendor
 COPY . .
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint
