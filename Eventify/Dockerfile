@@ -1,10 +1,10 @@
-FROM php:8.4-fpm AS builder
+FROM php:8.4-fpm-alpine AS builder
 
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
     git \
     unzip \
     libzip-dev \
-    libicu-dev
+    icu-dev
 
 RUN docker-php-ext-install zip intl
 
@@ -14,24 +14,28 @@ WORKDIR /var/www/html
 
 COPY composer.json composer.lock symfony.lock ./
 
-RUN composer install --no-scripts --no-progress --no-autoloader
+RUN composer install --no-scripts --no-progress --prefer-dist
 
 COPY . .
 
 RUN composer dump-autoload --optimize
 
-FROM php:8.4-fpm
+FROM php:8.4-fpm-alpine
 
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
+    icu-libs \
+    libzip
+
+RUN apk add --no-cache --virtual .build-deps \
     libzip-dev \
-    libicu-dev \
+    icu-dev \
     && docker-php-ext-install \
     pdo \
     pdo_mysql \
     zip \
     intl \
     opcache \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && apk del .build-deps
 
 WORKDIR /var/www/html
 
@@ -39,6 +43,7 @@ COPY --from=builder /var/www/html/vendor ./vendor
 COPY . .
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
 
 ENTRYPOINT ["docker-entrypoint"]
